@@ -11,13 +11,24 @@
 #endif
 
 #include "ScorePad.h"
+#include <map>
+#include <vector>
 
 class MyFrame:public wxFrame {
+
 public:
     MyFrame(const wxString &title);
+    void UpdatePads();
 private:
     void OnKeyUp(wxKeyEvent &event);
-    std::vector<ScorePad*> sps;
+    void Init();
+    void ReArrange(int dir);
+    void MoveDigit(std::vector<int> &vi);
+    void AddTheSame(std::vector<int> &vi);
+
+    int n = 4; // default 4x4 keyboard
+    std::map<int, std::vector<std::vector<int>>> indexs;
+    std::vector<ScorePad*> pads;
 };
 
 #endif //WX2048_MYFRAME_H

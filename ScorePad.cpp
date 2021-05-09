@@ -36,6 +36,7 @@ void ScorePad::OnPaint(wxPaintEvent &event)
 void ScorePad::Init()
 {
     Bind(wxEVT_PAINT, &ScorePad::OnPaint, this);
+    Bind(wxEVT_SET_FOCUS, [this](wxFocusEvent &event){ GetParent()->GetParent()->SetFocus();});
 }
 
 ScorePad::~ScorePad()
@@ -45,9 +46,27 @@ ScorePad::~ScorePad()
 
 void ScorePad::render(wxDC &dc)
 {
-    wxSize size = GetSize();
-    dc.SetBrush(m_color);
+    wxColor bk_color;
+    int temp = m_digit, power = 0;
+    while (temp >= 2)
+    {
+        temp /= 2;
+        ++power;
+    }
+
+    int index = power % colors.size();
+    if (!index)
+    {
+        bk_color = *wxWHITE;
+    }
+    else
+    {
+        bk_color = *colors[index];
+    }
+
+    dc.SetBrush(bk_color);
     dc.SetPen(*wxTRANSPARENT_PEN);
+    wxSize size = GetSize();
     dc.DrawRoundedRectangle(0, 0, size.GetWidth(), size.GetHeight(), 5);
 
     //设置字体

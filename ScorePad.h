@@ -17,8 +17,9 @@ public:
     ScorePad();
     bool Create(wxWindow *parent, wxWindowID id = wxID_ANY, const wxString &label="");
     virtual ~ScorePad();
-    void SetColor(const wxColor &color) {m_color = color;}
-    void SetDigit(const int digit) {m_digit = digit;}
+    void SetDigit(const int digit) {m_digit = digit;};
+    int GetDigit() const {return m_digit;};
+
 protected:
     virtual wxSize DoGetBestSize() const;
     void OnPaint(wxPaintEvent &event);
@@ -27,8 +28,7 @@ protected:
 private:
     void Init();
     int m_digit = 0;
-    wxColor m_color = *wxWHITE;
+    std::vector<const wxColor*> colors{wxRED, wxGREEN, wxBLACK, wxBLUE, wxCYAN, wxYELLOW, wxLIGHT_GREY,};
 };
-
 
 #endif //WX2048_SCOREPAD_H
