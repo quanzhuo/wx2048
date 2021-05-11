@@ -18,7 +18,7 @@ class MyFrame:public wxFrame {
 
 public:
     MyFrame(const wxString &title);
-    void UpdatePads();
+
 private:
     void OnKeyUp(wxKeyEvent &event);
     void Init();

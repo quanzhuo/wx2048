@@ -28,7 +28,7 @@ protected:
 private:
     void Init();
     int m_digit = 0;
-    std::vector<const wxColor*> colors{wxRED, wxGREEN, wxBLACK, wxBLUE, wxCYAN, wxYELLOW, wxLIGHT_GREY,};
+    std::vector<const wxColor*> colors{ wxRED, wxGREEN, wxBLACK, wxBLUE, wxCYAN, wxYELLOW, wxLIGHT_GREY,};
 };
 
 #endif //WX2048_SCOREPAD_H

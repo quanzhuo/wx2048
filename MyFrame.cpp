@@ -36,6 +36,7 @@ void MyFrame::OnKeyUp(wxKeyEvent &event)
 
     std::vector<int> before;
     std::for_each(pads.begin(), pads.end(), [&before](ScorePad *sp){before.push_back(sp->GetDigit());});
+
     ReArrange(event.GetKeyCode());
 
     bool changed = false;
@@ -61,13 +62,23 @@ void MyFrame::OnKeyUp(wxKeyEvent &event)
         }
     }
 
-    std::random_device r;
-    std::default_random_engine e1(r());
-    std::uniform_int_distribution<int> uniform_dist(0, empty_idx.size());
-    int idx = uniform_dist(e1);
-
-    pads[idx]->SetDigit(2);
-    pads[idx]->Refresh();
+    if (empty_idx.empty())
+    {
+        wxMessageBox("Failed");
+    }
+    else if (empty_idx.size() == 1)
+    {
+        pads[empty_idx.front()]->SetDigit(2);
+        pads[empty_idx.front()]->Refresh();
+    }
+    else if (empty_idx.size() > 1)
+    {
+        std::default_random_engine e(time(0));
+        std::uniform_int_distribution<unsigned> u(0, empty_idx.size()-1);
+        int idx = u(e);
+        pads[empty_idx[idx]]->SetDigit(2);
+        pads[empty_idx[idx]]->Refresh();
+    }
 }
 
 void MyFrame::Init()
@@ -118,13 +129,12 @@ void MyFrame::Init()
     }
     indexs[WXK_RIGHT] = vvi_right;
 
-    std::random_device r;
-    std::default_random_engine e1(r());
-    std::uniform_int_distribution<int> uniform_dist(0, n*n-1);
-    int i1 = uniform_dist(e1);
+    std::default_random_engine e(time(0));
+    std::uniform_int_distribution<int> u(0, n*n-1);
+    int i1 = u(e);
     while (true)
     {
-        int i2 = uniform_dist(e1);
+        int i2 = u(e);
         if (i1 != i2)
         {
             pads[i1]->SetDigit(2);
@@ -142,6 +152,7 @@ void MyFrame::ReArrange(int dir) {
     {
         MoveDigit(*iter);
         AddTheSame(*iter);
+        MoveDigit(*iter);
     }
 }
 
@@ -150,7 +161,7 @@ void MyFrame::MoveDigit(std::vector<int> &vi) {
     {
         auto first_zero = std::find_if(vi.begin(), vi.end(), [this](int v){ return !pads[v]->GetDigit();});
         auto first_non_zero = std::find_if(first_zero, vi.end(), [this](int v){return pads[v]->GetDigit();});
-        if (first_zero == vi.end() || first_non_zero == vi.end()) return; ;
+        if (first_zero == vi.end() || first_non_zero == vi.end()) return;
         std::vector<int> temp;
         // copy first_non_zero...end to temp
         std::for_each(first_non_zero, vi.end(), [&temp, this](int v){temp.push_back(pads[v]->GetDigit());});
@@ -166,7 +177,8 @@ void MyFrame::MoveDigit(std::vector<int> &vi) {
 void MyFrame::AddTheSame(std::vector<int> &vi) {
     for(auto it1 = vi.begin(), it2 = it1+1; it2 != vi.end(); ++it1, ++it2)
     {
-        if (pads[*it1]->GetDigit() == pads[*it2]->GetDigit())
+        if ((pads[*it1]->GetDigit() == pads[*it2]->GetDigit()) &&
+                (pads[*it1]->GetDigit() != 0))
         {
             pads[*it1]->SetDigit(pads[*it1]->GetDigit()*2);
             pads[*it2]->SetDigit(0);

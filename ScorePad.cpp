@@ -47,21 +47,24 @@ ScorePad::~ScorePad()
 void ScorePad::render(wxDC &dc)
 {
     wxColor bk_color;
-    int temp = m_digit, power = 0;
-    while (temp >= 2)
-    {
-        temp /= 2;
-        ++power;
-    }
 
-    int index = power % colors.size();
-    if (!index)
+    if (m_digit == 0)
     {
         bk_color = *wxWHITE;
     }
     else
     {
-        bk_color = *colors[index];
+        auto f_get_power = [](int x){
+            int ret = 0;
+            while(x >= 2)
+            {
+                x /= 2;
+                ++ret;
+            }
+            return ret;
+        };
+        int power = f_get_power(m_digit);
+        bk_color = *colors[(power-1)%7];
     }
 
     dc.SetBrush(bk_color);
