@@ -10,6 +10,8 @@
 #include "wx/wx.h"
 #endif
 
+#include <vector>
+
 class ScorePad : public wxWindow
 {
 public:

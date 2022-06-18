@@ -5,6 +5,8 @@
 #include "MyFrame.h"
 #include <random>
 #include <set>
+#include <algorithm>
+#include <vector>
 
 MyFrame::MyFrame(const wxString &title): wxFrame(nullptr, wxID_ANY, title)
 {
