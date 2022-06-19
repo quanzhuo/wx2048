@@ -17,6 +17,7 @@ MyFrame::MyFrame(const wxString &title): wxFrame(nullptr, wxID_ANY, title)
         ScorePad *pad = new ScorePad(panel);
         pads.push_back(pad);
         grid->Add(pad, wxSizerFlags(1).Expand());
+        pad->Bind(wxEVT_KEY_UP, &MyFrame::OnKeyUp, this);
     }
 
     wxSizer *top = new wxBoxSizer(wxVERTICAL);
@@ -27,8 +28,8 @@ MyFrame::MyFrame(const wxString &title): wxFrame(nullptr, wxID_ANY, title)
 
     Init();
 
-    Bind(wxEVT_KEY_UP, &MyFrame::OnKeyUp, this);
-    Bind(wxEVT_ACTIVATE, [this](wxActivateEvent &event){SetFocus();});
+    // Bind(wxEVT_KEY_UP, &MyFrame::OnKeyUp, this);
+    // Bind(wxEVT_ACTIVATE, [this](wxActivateEvent &event){SetFocus();});
 }
 
 void MyFrame::OnKeyUp(wxKeyEvent &event)
